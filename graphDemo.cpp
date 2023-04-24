@@ -10,8 +10,8 @@ int main(){
 //		graph[x].push_back({y,w});
 //		graph[y].push_back({x,w});
 //	}
-//	Graph<int> dothi(n,m,graph);
-	Graph<int> dothi;
+//	Graph dothi(n,m,graph);
+	Graph dothi;
 	dothi.read_fromFile("file.txt");
 	dothi.write_toFile("dothi.txt");
 	dothi.printList();
