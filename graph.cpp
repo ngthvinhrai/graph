@@ -4,18 +4,17 @@
 using namespace std;
 bool visited_comp[9];
 
-template<class T>
 class Graph{
 	unsigned int v,e;
-	list<pair<T,int>> *vertex;
+	list<pair<int,int>> *vertex;
 	bool cc;
 	public:
 		Graph(){
 			v=e=0;
-			vertex = new list<pair<T,int>>[v];
+			vertex = new list<pair<int,int>>[v+1];
 			cc = 0;
 		}
-		Graph(unsigned int dinh, unsigned int canh, list<pair<T,int>> *ke){
+		Graph(unsigned int dinh, unsigned int canh, list<pair<int,int>> *ke){
 			v = dinh;
 			e = canh;
 			vertex = ke;
@@ -30,9 +29,9 @@ class Graph{
 			ifstream file;
 			file.open(file_name);
 			file >> v >> e;
-			vertex = new list<pair<T,T>>[v+1];
-			for (int i=0;i<e;i++){
-				T x,y;
+			vertex = new list<pair<int,int>>[v+1];
+			for (int i=1;i<=e;i++){
+				int x,y;
 				int w;
 				file >> x >>y >> w;
 				vertex[x].push_back({y,w});
@@ -43,8 +42,8 @@ class Graph{
 		void write_toFile(string file_name){
 			ofstream file(file_name);
 			file<<v<<" "<<e<<endl;
-			for (int i=1;i<v+1;i++){
-				for (pair<T,int> x:vertex[i])
+			for (int i=1;i<=v;i++){
+				for (pair<int,int> x:vertex[i])
 					if (i<x.first)	file<<i<<" "<<x.first<<" "<<x.second<<endl;
 //				cout<<endl;
 			}
@@ -53,7 +52,7 @@ class Graph{
 		void DFS_comp(int i, bool visited_comp[]){
 			visited_comp[i] = true;
 			cout<<i<<" ";
-			for(pair<T,int> x:vertex[i]){
+			for(pair<int,int> x:vertex[i]){
 				if(!visited_comp[x.first])
 					DFS_comp(x.first, visited_comp);
 			}
@@ -92,7 +91,7 @@ class Graph{
 				int v = q.front();
 				q.pop();
 				cout<<v<<" ";
-				for (pair<T,T> x:vertex[v]){
+				for (pair<int,int> x:vertex[v]){
 					if(!visited[x.first]){
 						q.push(x.first);
 						visited[x.first] = true;
@@ -111,23 +110,23 @@ class Graph{
 				case 2: BFS(1, visited_comp);break;
 			}
 		}
-		void dijktra(T start, T finish){
-			int distance[v+1]; T pre[v+1];
+		void dijktra(int start, int finish){
+			int distance[v+1]; int pre[v+1];
 			for(int i=1;i<=v;i++)
 				distance[i] = 1e+9;
 			distance[start] = 0;
 			pre[start] = start;
-			queue<pair<T,int>> Q;
+			queue<pair<int,int>> Q;
 			Q.push({start,0});
 			while(!Q.empty()){
-				pair<T,int> top;
+				pair<int,int> top;
 				top = Q.front();
 				Q.pop();
-				T u = top.first;
+				int u = top.first;
 				int kc = top.second;
 				if(kc>distance[u]) continue;
-				for (pair<T,int> next:vertex[u]){
-					T v = next.first;
+				for (pair<int,int> next:vertex[u]){
+					int v = next.first;
 					int w = next.second;
 					if(distance[v]>distance[u]+w){
 						distance[v] = distance[u]+w;
@@ -137,7 +136,7 @@ class Graph{
 				}
 			}
 			cout<<"Khoang cach ngan nhat tu "<<start<<"->"<<finish<<": "<<distance[finish]<<endl;
-			vector<T> path;
+			vector<int> path;
 			cout<<"Duong di ngan nhat tu "<<start<<"->"<<finish<<": ";
 			while(1){
 				path.push_back(finish);
@@ -149,27 +148,11 @@ class Graph{
 		}
 		void printList(){
 			for(int i=1;i<=v;i++){
-				for(pair<T,int> x:vertex[i]){
+				for(pair<int,int> x:vertex[i]){
 					if(i<x.first)
-						cout<<i<<"->"<<x.first<<": "<<x.second<<endl;
+						cout<<i<<"-"<<x.first<<": "<<x.second<<endl;
 				}
 			}
 		}
 };
 
-//int main(){
-////	int n,m; cin >>n>>m;
-////	list<pair<int,int>> graph[n+1];
-////	for (int i=0; i<m;i++){
-////		int x, y, w; cin>>x>>y>>w;
-////		graph[x].push_back({y,w});
-////		graph[y].push_back({x,w});
-////	}
-////	Graph<int> dothi(n,m,graph);
-//	Graph<int> dothi;
-//	dothi.read_fromFile("file.txt");
-//	dothi.write_toFile("dothi.txt");
-//	dothi.printList();
-//	dothi.ConComp();
-//	dothi.dijktra(1,2);
-//}
